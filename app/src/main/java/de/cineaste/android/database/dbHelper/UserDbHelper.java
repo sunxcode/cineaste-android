@@ -1,63 +1,35 @@
 package de.cineaste.android.database.dbHelper;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 
-import de.cineaste.android.database.dao.BaseDao;
+import de.cineaste.android.database.CineasteDatabase;
+import de.cineaste.android.database.dao.UserDao;
 import de.cineaste.android.entity.User;
 
-public class UserDbHelper extends BaseDao {
+public class UserDbHelper {
 
-	private static UserDbHelper mInstance;
+	private static UserDbHelper instance;
+
+	private final UserDao userDao;
 
 	private UserDbHelper(Context context) {
-		super(context);
+		userDao = CineasteDatabase.getInstance(context).getUserDao();
 	}
 
 	public static UserDbHelper getInstance(Context context) {
-		if (mInstance == null) {
-			mInstance = new UserDbHelper(context);
+		if (instance == null) {
+			instance = new UserDbHelper(context);
 		}
 
-		return mInstance;
+		return instance;
 	}
 
 
 	public void createUser(User user) {
-		ContentValues values = new ContentValues();
-		values.put(UserEntry.COLUMN_USER_NAME, user.getUserName());
-
-		writeDb.insert(UserEntry.TABLE_NAME, null, values);
+		userDao.create(user);
 	}
 
 	public User getUser() {
-
-		String[] projection = {
-				UserEntry._ID,
-				UserEntry.COLUMN_USER_NAME
-		};
-
-		Cursor c = readDb.query(
-				UserEntry.TABLE_NAME,
-				projection,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null);
-
-		User user = null;
-
-		if (c.moveToFirst()) {
-			do {
-				user = new User();
-				user.setUserName(
-						c.getString(c.getColumnIndexOrThrow(UserEntry.COLUMN_USER_NAME)));
-			} while (c.moveToNext());
-		}
-		c.close();
-		return user;
+		return userDao.getUser();
 	}
 }

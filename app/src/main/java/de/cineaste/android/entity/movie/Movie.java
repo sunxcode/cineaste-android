@@ -1,13 +1,24 @@
 package de.cineaste.android.entity.movie;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class Movie extends MovieDto implements Comparable<Movie> {
+@Entity
+public class Movie implements Comparable<Movie> {
 
+	@PrimaryKey
+	@ColumnInfo(name = "_id")
+	private long id;
+	@SerializedName("poster_path")
+	private String posterPath;
+	private String title;
 	private int runtime;
 	@SerializedName("vote_average")
 	private double voteAverage;
@@ -25,6 +36,7 @@ public class Movie extends MovieDto implements Comparable<Movie> {
 		this.watched = false;
 	}
 
+	@Ignore
 	public Movie(
 			long id,
 			String posterPath,
@@ -33,12 +45,38 @@ public class Movie extends MovieDto implements Comparable<Movie> {
 			double voteAverage,
 			String description,
 			int voteCount) {
-		super(id, posterPath, title);
+		this.id = id;
+		this.posterPath = posterPath;
+		this.title = title;
 		this.runtime = runtime;
 		this.voteAverage = voteAverage;
 		this.voteCount = voteCount;
 		this.description = description;
 		this.watched = false;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getPosterPath() {
+		return posterPath;
+	}
+
+	public void setPosterPath(String posterPath) {
+		this.posterPath = posterPath;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public int getRuntime() {

@@ -16,7 +16,6 @@ import de.cineaste.android.activity.SeriesSearchActivity;
 import de.cineaste.android.adapter.series.SeriesListAdapter;
 import de.cineaste.android.controllFlow.series.HistoryListSeriesTouchHelperCallback;
 import de.cineaste.android.controllFlow.series.WatchlistSeriesTouchHelperCallback;
-import de.cineaste.android.database.dao.BaseDao;
 import de.cineaste.android.database.dbHelper.SeriesDbHelper;
 import de.cineaste.android.entity.series.Series;
 
@@ -117,7 +116,7 @@ public class SeriesListFragment extends BaseListFragment implements SeriesListAd
     @NonNull
     protected Intent createIntent(long itemId, int state, Activity activity) {
         Intent intent = new Intent(activity, SeriesDetailActivity.class);
-        intent.putExtra(BaseDao.SeriesEntry._ID, itemId);
+        intent.putExtra("_id", itemId);
         intent.putExtra(getString(R.string.state), state);
         return intent;
     }

@@ -13,7 +13,6 @@ import de.cineaste.android.activity.MovieSearchActivity;
 import de.cineaste.android.adapter.movie.MovieListAdapter;
 import de.cineaste.android.controllFlow.movie.HistorylistMovieTouchHelperCallback;
 import de.cineaste.android.controllFlow.movie.WatchlistMovieTouchHelperCallback;
-import de.cineaste.android.database.dao.BaseDao;
 
 public class BaseMovieListFragment extends BaseListFragment {
 
@@ -98,7 +97,7 @@ public class BaseMovieListFragment extends BaseListFragment {
     @NonNull
     protected Intent createIntent(long itemId, int state, Activity activity) {
         Intent intent = new Intent(activity, MovieDetailActivity.class);
-        intent.putExtra(BaseDao.MovieEntry._ID, itemId);
+        intent.putExtra("_id", itemId);
         intent.putExtra(getString(R.string.state), state);
         return intent;
     }

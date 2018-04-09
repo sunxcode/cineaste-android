@@ -1,14 +1,23 @@
 package de.cineaste.android.entity.series;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Series {
 
+    @PrimaryKey
+    @ColumnInfo(name = "_id")
     private long id;
+    @ColumnInfo(name = "seriesName")
     private String name;
     @SerializedName("vote_average")
     private double voteAverage;
@@ -28,6 +37,7 @@ public class Series {
     private String posterPath;
     @SerializedName("backdrop_path")
     private String backdropPath;
+    @Ignore
     private List<Season> seasons;
 
     private boolean watched;

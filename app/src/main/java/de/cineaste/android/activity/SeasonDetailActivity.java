@@ -18,7 +18,6 @@ import java.util.List;
 
 import de.cineaste.android.R;
 import de.cineaste.android.adapter.series.SeasonPagerAdapter;
-import de.cineaste.android.database.dao.BaseDao;
 import de.cineaste.android.database.dbHelper.SeriesDbHelper;
 import de.cineaste.android.entity.series.Season;
 import de.cineaste.android.entity.series.Series;
@@ -41,8 +40,8 @@ public class SeasonDetailActivity extends AppCompatActivity {
         poster = findViewById(R.id.poster_image_view);
 
         Intent intent = getIntent();
-        long seriesId = intent.getLongExtra(BaseDao.SeasonEntry.COLUMN_SEASON_SERIES_ID, -1);
-        seasonId = intent.getLongExtra(BaseDao.SeasonEntry.COLUMN_SEASON_SEASON_NUMBER, -1);
+        long seriesId = intent.getLongExtra("seriesId", -1);
+        seasonId = intent.getLongExtra("seasonNumber", -1);
 
         currentSeries = seriesDbHelper.getSeriesById(seriesId);
 

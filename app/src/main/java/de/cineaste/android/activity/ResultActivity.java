@@ -13,12 +13,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.cineaste.android.util.DateAwareGson;
-import de.cineaste.android.util.MultiList;
 import de.cineaste.android.R;
 import de.cineaste.android.adapter.ResultAdapter;
-import de.cineaste.android.database.dbHelper.MovieDbHelper;
 import de.cineaste.android.database.NearbyMessageHandler;
+import de.cineaste.android.database.dbHelper.MovieDbHelper;
 import de.cineaste.android.entity.movie.MatchingResult;
 import de.cineaste.android.entity.movie.Movie;
 import de.cineaste.android.entity.movie.MovieDto;
@@ -27,6 +25,8 @@ import de.cineaste.android.network.NetworkCallback;
 import de.cineaste.android.network.NetworkClient;
 import de.cineaste.android.network.NetworkRequest;
 import de.cineaste.android.network.NetworkResponse;
+import de.cineaste.android.util.DateAwareGson;
+import de.cineaste.android.util.MultiList;
 
 public class ResultActivity extends AppCompatActivity implements ResultAdapter.OnMovieSelectListener {
 

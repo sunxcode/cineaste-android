@@ -1,125 +1,42 @@
 package de.cineaste.android.database.dao;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.cineaste.android.entity.series.Episode;
 
-public class EpisodeDao extends BaseDao {
+@Dao
+public interface EpisodeDao {
 
-    private static EpisodeDao instance;
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void create(Episode episode);
 
-    private EpisodeDao(Context context) {
-        super(context);
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void create(List<Episode> episodes);
 
-    public static EpisodeDao getInstance(Context context) {
-        if (instance == null) {
-            instance = new EpisodeDao(context);
-        }
+    @Query("SELECT * FROm episode WHERE _id = :episodeId")
+    Episode getById(long episodeId);
 
-        return instance;
-    }
+    @Query("SELECT * FROM episode WHERE seasonId = :seasonId")
+    List<Episode> readEpisodesBySeasonId(long seasonId);
 
-    public void executeCustomSql(String sql) {
-        writeDb.execSQL(sql);
-    }
+    @Query("DELETE FROM episode WHERE seriesId = :seriesId")
+    void deleteBySeriesId(long seriesId);
 
-    public void create(Episode episode) {
-        ContentValues values = new ContentValues();
-        values.put(EpisodeEntry._ID, episode.getId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER, episode.getEpisodeNumber());
-        values.put(EpisodeEntry.COLUMN_EPISODE_NAME, episode.getName());
-        values.put(EpisodeEntry.COLUMN_EPISODE_DESCRIPTION, episode.getDescription());
-        values.put(EpisodeEntry.COLUMN_EPISODE_SEASON_ID, episode.getSeasonId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_WATCHED, episode.isWatched() ? 1 : 0);
+    @Update
+    void update(Episode episode);
 
-        writeDb.insert(EpisodeEntry.TABLE_NAME, null, values);
-    }
+    @Update
+    void update(List<Episode> episodes);
 
-    public void create(Episode episode, long seriesId, long seasonId) {
-        ContentValues values = new ContentValues();
-        values.put(EpisodeEntry._ID, episode.getId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER, episode.getEpisodeNumber());
-        values.put(EpisodeEntry.COLUMN_EPISODE_NAME, episode.getName());
-        values.put(EpisodeEntry.COLUMN_EPISODE_DESCRIPTION, episode.getDescription());
-        values.put(EpisodeEntry.COLUMN_EPISODE_SERIES_ID, seriesId);
-        values.put(EpisodeEntry.COLUMN_EPISODE_SEASON_ID, seasonId);
-        values.put(EpisodeEntry.COLUMN_EPISODE_WATCHED, episode.isWatched() ? 1 : 0);
+    @Query("UPDATE episode SET watched = :watchState WHERE seriesId = :seriesId")
+    void updateWatchStateForSeries(boolean watchState, long seriesId);
 
-        writeDb.insert(EpisodeEntry.TABLE_NAME, null, values);
-    }
-
-    public List<Episode> read(String selection, String[] selectionArgs) {
-        List<Episode> episodes = new ArrayList<>();
-
-        String[] projection = {
-                EpisodeEntry._ID,
-                EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER,
-                EpisodeEntry.COLUMN_EPISODE_NAME,
-                EpisodeEntry.COLUMN_EPISODE_DESCRIPTION,
-                EpisodeEntry.COLUMN_EPISODE_SERIES_ID,
-                EpisodeEntry.COLUMN_EPISODE_SEASON_ID,
-                EpisodeEntry.COLUMN_EPISODE_WATCHED
-        };
-
-        Cursor c = readDb.query(
-                EpisodeEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER + " ASC",
-                null);
-
-        if (c.moveToFirst()) {
-            do {
-                Episode currentEpisode = new Episode();
-                currentEpisode.setId(
-                        c.getLong(c.getColumnIndexOrThrow(EpisodeEntry._ID)));
-                currentEpisode.setEpisodeNumber(
-                        c.getInt(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER)));
-                currentEpisode.setName(
-                        c.getString(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_NAME)));
-                currentEpisode.setDescription(
-                        c.getString(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_DESCRIPTION)));
-                currentEpisode.setSeriesId(
-                        c.getLong(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_SERIES_ID)));
-                currentEpisode.setSeasonId(
-                        c.getLong(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_SEASON_ID)));
-                currentEpisode.setWatched(
-                        c.getInt(c.getColumnIndexOrThrow(EpisodeEntry.COLUMN_EPISODE_WATCHED)) > 0);
-
-                episodes.add(currentEpisode);
-            } while (c.moveToNext());
-        }
-        c.close();
-        return episodes;
-    }
-
-    public void update(Episode episode) {
-        ContentValues values = new ContentValues();
-        values.put(EpisodeEntry._ID, episode.getId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_EPISODE_NUMBER, episode.getEpisodeNumber());
-        values.put(EpisodeEntry.COLUMN_EPISODE_NAME, episode.getName());
-        values.put(EpisodeEntry.COLUMN_EPISODE_DESCRIPTION, episode.getDescription());
-        values.put(EpisodeEntry.COLUMN_EPISODE_SERIES_ID, episode.getSeriesId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_SEASON_ID, episode.getSeasonId());
-        values.put(EpisodeEntry.COLUMN_EPISODE_WATCHED, episode.isWatched() ? 1 : 0);
-
-        String selection = BaseDao.EpisodeEntry._ID + " LIKE ?";
-        String[] selectionArgs = {String.valueOf(episode.getId())};
-
-        writeDb.update(EpisodeEntry.TABLE_NAME, values, selection, selectionArgs);
-    }
-
-    public void deleteBySeriesId(long seriesId) {
-        writeDb.delete(EpisodeEntry.TABLE_NAME, EpisodeEntry.COLUMN_EPISODE_SERIES_ID + " = ?", new String[]{seriesId + ""});
-    }
-
+    @Query("UPDATE episode SET watched = :watchState WHERE seasonId = :seasonId")
+    void updateWatchStateForSeason(boolean watchState, long seasonId);
 }

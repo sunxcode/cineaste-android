@@ -1,17 +1,36 @@
 package de.cineaste.android.entity.series;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey(entity = Series.class,
+        parentColumns = "_id",
+        childColumns = "seriesId",
+        onDelete = CASCADE),
+        indices = {@Index(value = "seriesId")
+        })
 public class Season {
 
+    @PrimaryKey
+    @ColumnInfo(name = "_id")
     private long id;
     @SerializedName("air_date")
     private Date releaseDate;
+    //todo rename in db
     @SerializedName("episode_count")
+    @ColumnInfo(name = "episodenCount")
     private int episodeCount;
     @SerializedName("poster_path")
     private String posterPath;
@@ -19,7 +38,10 @@ public class Season {
     private int seasonNumber;
 
     private long seriesId;
+    @ColumnInfo(name = "seasonWatched")
     private boolean watched;
+
+    @Ignore
     private List<Episode> episodes;
 
     public Season() {

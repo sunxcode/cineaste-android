@@ -13,7 +13,6 @@ import java.util.List;
 
 import de.cineaste.android.R;
 import de.cineaste.android.adapter.series.SeriesSearchQueryAdapter;
-import de.cineaste.android.database.dao.BaseDao;
 import de.cineaste.android.database.dbHelper.SeriesDbHelper;
 import de.cineaste.android.entity.series.Series;
 import de.cineaste.android.network.NetworkClient;
@@ -29,7 +28,7 @@ public class SeriesSearchActivity extends AbstractSearchActivity implements Seri
     @NonNull
     protected Intent getIntentForDetailActivity(long itemId) {
         Intent intent = new Intent(this, SeriesDetailActivity.class);
-        intent.putExtra(BaseDao.SeriesEntry._ID, itemId);
+        intent.putExtra("_id", itemId);
         intent.putExtra(this.getString(R.string.state), R.string.searchState);
         return intent;
     }

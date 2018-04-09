@@ -13,7 +13,6 @@ import java.util.List;
 
 import de.cineaste.android.R;
 import de.cineaste.android.adapter.movie.MovieSearchQueryAdapter;
-import de.cineaste.android.database.dao.BaseDao;
 import de.cineaste.android.database.dbHelper.MovieDbHelper;
 import de.cineaste.android.entity.movie.Movie;
 import de.cineaste.android.network.NetworkCallback;
@@ -30,7 +29,7 @@ public class MovieSearchActivity extends AbstractSearchActivity implements  Movi
     @NonNull
     protected Intent getIntentForDetailActivity(long itemId) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra(BaseDao.MovieEntry._ID, itemId);
+        intent.putExtra("_id", itemId);
         intent.putExtra(this.getString(R.string.state), R.string.searchState);
         return intent;
     }

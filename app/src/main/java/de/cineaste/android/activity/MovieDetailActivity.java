@@ -31,11 +31,10 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import de.cineaste.android.database.dbHelper.MovieDbHelper;
 import de.cineaste.android.util.Constants;
 import de.cineaste.android.util.DateAwareGson;
 import de.cineaste.android.R;
-import de.cineaste.android.database.dao.BaseDao;
-import de.cineaste.android.database.dbHelper.MovieDbHelper;
 import de.cineaste.android.entity.movie.Movie;
 import de.cineaste.android.network.NetworkCallback;
 import de.cineaste.android.network.NetworkClient;
@@ -201,7 +200,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         gson = new DateAwareGson().getGson();
 
         Intent intent = getIntent();
-        movieId = intent.getLongExtra(BaseDao.MovieEntry._ID, -1);
+        movieId = intent.getLongExtra("_id", -1);
         state = intent.getIntExtra(getString(R.string.state), -1);
 
         initViews();
@@ -210,6 +209,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         updateCallBack = getUpdateCallback();
         autoUpdateMovie();
+
 
         currentMovie = movieDbHelper.readMovie(movieId);
         if (currentMovie == null) {

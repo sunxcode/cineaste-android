@@ -31,7 +31,6 @@ import com.squareup.picasso.Picasso;
 
 import de.cineaste.android.R;
 import de.cineaste.android.adapter.series.SeriesDetailAdapter;
-import de.cineaste.android.database.dao.BaseDao;
 import de.cineaste.android.database.dbHelper.SeriesDbHelper;
 import de.cineaste.android.entity.series.Series;
 import de.cineaste.android.listener.ItemClickListener;
@@ -225,8 +224,8 @@ public class SeriesDetailActivity extends AppCompatActivity implements ItemClick
     @Override
     public void onItemClickListener(long itemId, View[] views) {
         Intent intent = new Intent(SeriesDetailActivity.this, SeasonDetailActivity.class);
-        intent.putExtra(BaseDao.SeasonEntry.COLUMN_SEASON_SERIES_ID, currentSeries.getId());
-        intent.putExtra(BaseDao.SeasonEntry.COLUMN_SEASON_SEASON_NUMBER, itemId);
+        intent.putExtra("seriesId", currentSeries.getId());
+        intent.putExtra("seasonNumber", itemId);
 
         if(state != R.string.searchState)
             startActivity(intent);
@@ -241,7 +240,7 @@ public class SeriesDetailActivity extends AppCompatActivity implements ItemClick
         seriesLoader = new SeriesLoader(this);
 
         Intent intent = getIntent();
-        seriesId = intent.getLongExtra(BaseDao.SeriesEntry._ID, -1);
+        seriesId = intent.getLongExtra("_id", -1);
         state = intent.getIntExtra(getString(R.string.state), -1);
 
         initViews();
