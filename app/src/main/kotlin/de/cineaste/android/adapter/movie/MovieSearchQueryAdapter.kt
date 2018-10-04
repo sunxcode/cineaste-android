@@ -38,7 +38,7 @@ class MovieSearchQueryAdapter(private val listener: ItemClickListener, private v
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieSearchViewHolder {
         val v = LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.card_movie_search, parent, false)
+                .inflate(R.layout.card_movie_search2, parent, false)
         return MovieSearchViewHolder(v, parent.context, movieStateChange, listener)
     }
 

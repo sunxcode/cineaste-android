@@ -26,8 +26,9 @@ abstract class BaseViewHolder protected constructor(protected val view: View, pr
                 .replace("<API_KEY>", context.getString(R.string.movieKey))
         Picasso.get()
                 .load(posterUri)
-                .resize(222, 334)
                 .error(R.drawable.placeholder_poster)
+                .fit()
+                .centerCrop()
                 .into(poster)
     }
 
