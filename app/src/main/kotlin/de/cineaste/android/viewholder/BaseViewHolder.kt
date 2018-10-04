@@ -27,8 +27,6 @@ abstract class BaseViewHolder protected constructor(protected val view: View, pr
         Picasso.get()
                 .load(posterUri)
                 .error(R.drawable.placeholder_poster)
-                .fit()
-                .centerCrop()
                 .into(poster)
     }
 
